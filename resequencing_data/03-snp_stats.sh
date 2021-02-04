@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# looking at snp stats
+# looking at snp statistics
 
 all_variants=/home/degreefe/NBW/reseq_newsnps/NBW_variantcalls_platypus
 snps=/home/degreefe/NBW/reseq_newsnps/NBW_platypus_SNPs
