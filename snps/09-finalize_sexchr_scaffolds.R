@@ -2,12 +2,12 @@
 
 setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/MFcoverage/series")
 
+# 1) create final list of sex-linked scaffolds (doing X and Y separately)
+library(tidyverse)
+
 bed="NBW_genome.10KBwindows.Xlinked.bed"
 type="Xlinked"
 scaffold_info="Northern_bottlenose_whale_051018_shortLabel.fasta.fai"
-
-# 1) create final list of sex-linked scaffolds (doing X and Y separately)
-library(tidyverse)
 
 # bedtools command for ref to remember order of columns
 #bedtools annotate -i NBW_genome.10KBwindows.bed -files X_linked_scafwindows.M1F1.bed X_linked_scafwindows.M1F2.bed X_linked_scafwindows.M2F1.bed X_linked_scafwindows.M2F2.bed Control_scafwindows_remove1scaf.M1M2.bedControl_scafwindows.F1F2.bed > NBW_genome.10KBwindows.Xlinked.bed
