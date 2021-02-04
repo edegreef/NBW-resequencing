@@ -83,4 +83,4 @@ hist(satsuma$identity)
 # see how many unique scaffolds on query genome
 uniq_scaf <- as.data.frame(unique(satsuma$query_scaf))
 
-# will need to see if these scaffolds hit other chromosomes
+# will need to see if these scaffolds hit other chromosomes. also need to make final list of scaffold to chr. (in progress)
