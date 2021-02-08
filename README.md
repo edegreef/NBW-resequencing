@@ -13,7 +13,7 @@ This is a repository for scripts I used in analyzing northern bottlenose whale (
 03. Removed indels then extracted snp metrics with *bcftools* and *vcftools*
 04. Looked at snp metrics in *R*
 05. Filtered snps based on quality with *GATK* and *vcftools*
-06. Used *bcftools* to edit sample ID label (removing the path in each sample ID name) and to add word "scaffold" to each scaffold name so data can be used in downstream analyses that won't take data with an interger as scaffold name.
+06. Used *bcftools* to edit sample ID label (removing the path in each sample ID name) and to add word "contig" to each scaffold name so data can be used in downstream analyses that won't take data with an interger as scaffold name.
 #### Sex chromosomes
 07. Notes on using *DifCover* for coverage comparisons between males and females
 08. Examined *DifCover* results in R
