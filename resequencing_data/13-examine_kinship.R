@@ -23,6 +23,22 @@ IBD <- read.table(paste(directory,"/", files,".genome", sep=""), header=T)
 IBD_order_PH <- IBD[order(IBD[,10], decreasing=TRUE),]
 write.csv(IBD_order_PH, "IBD_autosomes_LDpruned_rm8highmiss_PIHAT.csv")
 
+# make nicer histogram, also remove duplicate so we are just looking at real kins:
+# remove duplicate: Hyam-2016-06-pooled & NBW-2016-06 --remove row123. 
+IBD_2 <- IBD[-123,]
+
+# order by pi_hat and then add nrow (for pair#s)
+IBD_2 <- IBD_2[order(IBD_2[,10], decreasing=TRUE),]
+IBD_2$pair <- 1:nrow(IBD_2)
+
+library(ggplot2)
+ggplot(data=IBD_2, aes(x=PI_HAT))+
+  geom_histogram(bins=125, color="steelblue", fill="steelblue")+
+  theme_bw()+
+  ylab("number of pairs")+
+  xlab("pi hat")
+ggsave("IBD_geomhistogram.png", width=6,height=4.5,dpi=300)
+
 
 # PI_HAT value reference:
 # 1st degree relative: 0.5
