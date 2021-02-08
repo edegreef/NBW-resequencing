@@ -31,5 +31,5 @@ This is a repository for scripts I used in analyzing northern bottlenose whale (
 * Evaluated t-SNE with *Rtsne*
 * Estimated FST with *hierfstat*, created heatmap, and also analyzed isolation-by-distance
 * Looked at SNMF results and plotted pie chart admixture map
-* Ran admixture and NGSadmix with shell script
+* Ran *ADMIXTURE* and *NGSadmix* with shell script
 * Compared ancestral admixture analyses together in R
