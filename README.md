@@ -9,8 +9,8 @@ This is a repository for scripts I used in analyzing northern bottlenose whale (
 ### Resequencing data folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/resequencing_data)
 #### Initial SNP prep
 01. Lowered variation in sample coverage, and checked modal coverage with `bam_coverage.sh` (all samples were assess for modal coverage before downsampling, then checked again afterwards).
-02. Called snps from bams using *Platypus*
-03. Removed indels with *vcftools* and then extracted snp metrics with *bcftools* and *vcftools*
+02. Called variants from bams and reference genome using *Platypus*
+03. Removed indels then extracted snp metrics with *bcftools* and *vcftools*
 04. Looked at snp metrics in *R*
 05. Filtered snps based on quality with *GATK* and *vcftools*
 06. Used *bcftools* to edit sample ID label (removing the path in each sample ID name) and to add word "contig" to each scaffold name (in hindsight I probably should have used "scaffold" instead of "contig") so data can be used in downstream analyses that won't take data with an interger as scaffold name.
