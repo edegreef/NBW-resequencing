@@ -43,5 +43,4 @@ mv $Ysnps.LDpruned.malesY.recode.vcf $Ysnps.LDpruned.malesY.vcf
 
 # convert to bim/bed/fam
 /home/degreefe/programs/plink --allow-extra-chr --make-bed --vcf $Xsnps.LDpruned.femalesX.vcf --set-missing-var-ids @:#\$1,\$2 --out $Xsnps.LDpruned.femalesX
-
 /home/degreefe/programs/plink --allow-extra-chr --make-bed --vcf $Ysnps.LDpruned.malesY.vcf --set-missing-var-ids @:#\$1,\$2 --out $Ysnps.LDpruned.malesY
