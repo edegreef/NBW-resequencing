@@ -1,6 +1,6 @@
 ![Logo](https://github.com/edegreef/NBW-resequencing/blob/main/NBW-cartoon-forgit.JPG)
 
-This is a repository for scripts I used in analyzing northern bottlenose whale (*Hyperoodon ampullatus*) resequencing data. These scripts were executed on computing resources through the University of Manitoba and Compute Canada. Project is a collaboration with the Marine Gene Probe Lab & Whitehead Lab at the Dalhousie University and the University of Manitoba.
+This is a repository for scripts used in analyzing northern bottlenose whale (*Hyperoodon ampullatus*) resequencing data. These scripts were executed on computing resources through the University of Manitoba and Compute Canada. Project is a collaboration with the Marine Gene Probe Lab & Whitehead Lab at the Dalhousie University and the University of Manitoba.
 <br/>
 ### Reference genome folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/reference_genome)
 * Evaluated genome quality with *QUAST*, *Assemblathon*, *BUSCO*)
