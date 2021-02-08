@@ -2,7 +2,7 @@
 
 # looking at snp statistics
 
-all_variants=/home/degreefe/NBW/reseq_newsnps/NBW_variantcalls_platypus
+all_variants=/home/degreefe/NBW/reseq_newsnps/NBW_platypus_allvariantcalls
 snps=/home/degreefe/NBW/reseq_newsnps/NBW_platypus_SNPs
 
 # filter out indels 
