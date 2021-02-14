@@ -31,6 +31,7 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 * Evaluated t-SNE with *Rtsne*
 * Estimated FST and heterozygosity with *hierfstat*, created FST heatmap, and also analyzed isolation-by-distance
 * Identified private and shared snps with bcftools isec
-* Looked at SNMF results and plotted pie chart admixture map
-* Ran *ADMIXTURE* and *NGSadmix* with shell script
+* Ran sNMF with LEA in R, looked at results, and plotted pie chart admixture map
+* Ran *ADMIXTURE* with shell script
+* Filtered beagle file to match snp sites and then ran *NGSadmix*
 * Compared ancestral admixture analyses together in R
