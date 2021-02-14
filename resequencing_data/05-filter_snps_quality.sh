@@ -20,16 +20,16 @@ mv NBW_platypus_SNPs.QUAL.MQ.QD.vcf.gz.tbi NBW_platypus_SNPs.filter1.vcf.gz.tbi
 rm NBW_platypus_SNPs.QUAL*
 
 
-# 2) Second round of filtering, for minor allele count, max missingness, and non-biallelic sites
-
-# minor allele count
-vcftools --gzvcf NBW_platypus_SNPs.filter1.vcf.gz --mac 2 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.mac
+# 2) Second round of filtering, for max missingness, minor allele count, and non-biallelic sites
 
 # missingness (in vcftools 1=no missing, 0=all missing)
-vcftools --vcf NBW_platypus_SNPs.filter1.mac.recode.vcf --max-missing 0.6 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.mac.miss
+vcftools --gzvcf NBW_platypus_SNPs.filter1.vcf.gz --max-missing 0.6 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.miss
+
+# minor allele count
+vcftools --vcf NBW_platypus_SNPs.filter1.miss.recode.vcf --mac 2 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.miss.mac
 
 # remove non-biallelic sites
-vcftools --vcf NBW_platypus_SNPs.filter1.mac.miss.recode.vcf --min-alleles 2 --max-alleles 2 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.mac.miss.biallel
+vcftools --vcf NBW_platypus_SNPs.filter1.miss.mac.recode.vcf --min-alleles 2 --max-alleles 2 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.miss.mac.biallel
 
-mv NBW_platypus_SNPs.filter1.mac.miss.biallel.recode.vcf NBW_platypus_SNPs.filter1.filter2.vcf
-rm NBW_platypus_SNPs.filter1.mac*
+mv NBW_platypus_SNPs.filter1.miss.mac.biallel.recode.vcf NBW_platypus_SNPs.filter1.filter2.vcf
+rm NBW_platypus_SNPs.filter1.miss*
