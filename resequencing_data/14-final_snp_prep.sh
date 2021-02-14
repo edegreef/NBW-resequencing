@@ -12,13 +12,16 @@ mv $snps_out.recode.vcf $snps_out.vcf
 # convert to bim/bed/fam, using these files for most pop analyses
 /home/degreefe/programs/plink --allow-extra-chr --make-bed --vcf $snps_out.vcf --set-missing-var-ids @:#\$1,\$2 --out $snps_out
 
-# increase max missingness filter to 0.1 (0.9 for vcftools) to use in LEA and Rtsne
+# increase max missingness filter to 0.1 (0.9 for vcftools) to use in LEA, ADMIXTURE, and Rtsne
 vcftools --vcf $snps_out.vcf --max-missing 0.9 --recode --recode-INFO-all --out $snps_out.miss01
 mv $snps_out.miss01.recode.vcf $snps_out.miss01.vcf
 
 # convert to ped/map (for LEA program)
 /home/degreefe/programs/bcftools-1.9/bcftools view -H $snps_out.miss01.vcf | cut -f 1 | uniq | awk '{print $0"\t"$0}' > chrom-map.txt
 vcftools --vcf $snps_out.miss01.vcf --plink --chrom-map chrom-map.txt --out $snps_out.miss01
+
+# convert to bed/bim/bam (for ADMIXTURE program)
+/home/degreefe/programs/plink --allow-extra-chr --make-bed --vcf $snps_out.miss01.vcf --set-missing-var-ids @:#\$1,\$2 --out $snps_out.miss01
 
 # imputing remaining snps (for Rtsne program). LD-pruned file probably ok for tsne, but if want to impute snps for other things may need to do so with not-pruned file.
 java -jar $EBROOTBEAGLE/beagle.jar gt=NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.miss01.vcf iterations=20 out=NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.miss01.imputed
