@@ -29,7 +29,8 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 * Made site map including ocean depth using a variety of *R* packages
 * Evaluated PCA with *pcadapt* and created heatmap matrix of PC1 and PC2 distances
 * Evaluated t-SNE with *Rtsne*
-* Estimated FST with *hierfstat*, created heatmap, and also analyzed isolation-by-distance
+* Estimated FST and heterozygosity with *hierfstat*, created FST heatmap, and also analyzed isolation-by-distance
+* Identified private and shared snps with bcftools isec
 * Looked at SNMF results and plotted pie chart admixture map
 * Ran *ADMIXTURE* and *NGSadmix* with shell script
 * Compared ancestral admixture analyses together in R
