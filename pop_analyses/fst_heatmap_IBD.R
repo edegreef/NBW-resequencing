@@ -1,4 +1,4 @@
-# 1) Looking at FST between populations. Help from Matt Thorstensen to for code to run Hierfstat.
+# 1) Looking at FST & heterozygosity between populations. Help from Matt Thorstensen to for code to run Hierfstat.
 # 2) Making fst heatmap
 # 3) Examining isolation-by-distance pattern & running mantel test
 
@@ -63,6 +63,41 @@ wc_bootstrp_confidence$ul
 write.csv(wc_bootstrp_confidence$ll,"NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.FST.ll.csv")
 write.csv(wc_bootstrp_confidence$ul,"NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.FST.ul.csv")
 save(wc_bootstrp_confidence,file="NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.wc_bootstrp_CI.RData")
+
+# look at heterozygosity stats
+# re-sort the data 
+df <- df[order(df$region),]
+df[,1:3] # check
+
+# basic stats for all pops overall
+basic_stats <- basic.stats(data = df)
+basic_stats
+
+# save environment:
+save.image(file = "overall_basic.stats.RData")
+
+# basic stats for population 1 
+basic_1 <- basic.stats(df[df$region==1,], diploid = TRUE)
+basic_1$overall
+
+# basic stats for population 2 
+basic_2 <- basic.stats(df[df$region==2,], diploid = TRUE)
+basic_2$overall
+
+# basic stats for population 3 
+basic_3 <- basic.stats(df[df$region==3,], diploid = TRUE)
+basic_3$overall
+
+# basic stats for population 4 
+basic_4 <- basic.stats(df[df$region==4,], diploid = TRUE)
+basic_4$overall
+
+# basic stats for population 5 
+basic_5 <- basic.stats(df[df$region==5,], diploid = TRUE)
+basic_5$overall
+
+# save environment:
+save.image(file = "population_level_basic.stats.RData")
 
 
 # 2) fst heatmap
