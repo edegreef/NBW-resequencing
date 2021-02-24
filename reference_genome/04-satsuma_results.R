@@ -218,6 +218,11 @@ scaf_list2 <- anti_join(scaf_list, X_dip, by=c("query_scaf"))
 # removing satsuma-determined X chr because will be using the difcover results for X in the end. The downside here is that the ordering of X and Y will not be included
 scaf_list3 <- subset(scaf_list2, target_chr != "chrx")
 
+# can save a file here for just satsuma-autosomes
+write.csv(scaf_list3, "nbw_scaf_chr_info.csv", row.names = FALSE)
+
+# now for making 'master' list
+
 # add an ordering id
 scaf_list3$order_id <- 1:nrow(scaf_list3)
 
