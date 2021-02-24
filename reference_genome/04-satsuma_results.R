@@ -215,34 +215,47 @@ X_dip <- as.data.frame(X_test$query_scaf)
 colnames(X_dip) <- "query_scaf"
 scaf_list2 <- anti_join(scaf_list, X_dip, by=c("query_scaf"))
 
-# removing satsuma X chr because will be using the difcover results for X in the end. The downside here is that the ordering of X and Y will not be included
-scaf_list_final <- subset(scaf_list2, target_chr != "chrx")
+# removing satsuma-determined X chr because will be using the difcover results for X in the end. The downside here is that the ordering of X and Y will not be included
+scaf_list3 <- subset(scaf_list2, target_chr != "chrx")
+
+# add an ordering id
+scaf_list3$order_id <- 1:nrow(scaf_list3)
+
+# merge sex-scaf info
+X_scafs$target_chr <- "chrx"
+Y_scafs$target_chr <- "chry"
+sex_scafs <- rbind(X_scafs, Y_scafs)
+sex_scafs <- sex_scafs %>% left_join(scaffold_lengths, by=c("query_scaf"="scaf")) %>% na.omit()
+
+# add empty columns in sex_scaf list, just as a placeholder so we can rbind with scaf_list
+sex_scafs$orientation <- NA
+sex_scafs$start_target_base <- NA
+sex_scafs <- sex_scafs %>% select("query_scaf", "scaffold_length", "target_chr", "start_target_base", "orientation")
+sex_scafs$order_id <- NA
+
+# make a final list that has info for scaffolds belonging to each chrs with X and Y at the end
+scaf_list_final <- rbind(scaf_list3, sex_scafs)
 
 # save list for nbw things!
-write.csv(scaf_list_final, "nbw_scaf_chr_info.csv", row.names = FALSE)
+write.csv(scaf_list_final, "nbw_scaf_chr_info_allchrs.csv", row.names = FALSE)
 
-# prep file for comparing the new determined chr lengths in bottlenose whale with the blue whale model
+
+### comparing total chromosome lengths in bottlenose whale with blue whale model
+# prep file
 chr_lengths <- scaf_list_final %>% group_by(target_chr) %>%  summarise(scaffold_length = sum(scaffold_length)) %>% arrange(factor(target_chr, levels=good_order))
 colnames(chr_lengths) <- c("chr", "nbw_length")
 
-# getting lengths for X, Y, and unplaced
-X_scafs <- X_scafs %>% left_join(scaffold_lengths, by=c("query_scaf"="scaf")) %>% na.omit()
-X_length <- sum(X_scafs$scaffold_length)
-Y_scafs <- Y_scafs %>% left_join(scaffold_lengths, by=c("query_scaf"="scaf")) %>% na.omit()
-Y_length <- sum(Y_scafs$scaffold_length)
-
+# getting lengths for unplaced scaffolds
 unplaced <- scaffold_lengths %>% 
-  anti_join(scaf_list_final, by=c("scaf"="query_scaf")) %>% na.omit() %>% 
-  anti_join(X_scafs, by=c("scaf"="query_scaf")) %>% na.omit() %>%
-  anti_join(Y_scafs, by=c("scaf"="query_scaf")) %>% na.omit()
+  anti_join(scaf_list_final, by=c("scaf"="query_scaf")) %>% na.omit()
 
 unplaced_length <- sum(unplaced$scaffold_length)
 unplaced_length / NBW_ref
 # 6% unplaced, not too bad.
 
 # add these to the chr_length
-chr_temp <- data.frame(first_column = c("chrx", "chry", "unplaced"),
-                  second_column = c(X_length, Y_length, unplaced_length))
+chr_temp <- data.frame(first_column = "unplaced",
+                  second_column = unplaced_length)
 colnames(chr_temp) <- c("chr", "nbw_length")
 chr_lengths <- rbind(chr_lengths, chr_temp)
 
@@ -307,13 +320,12 @@ plot_m <- ggExtra::ggMarginal(
   plot,
   type = 'histogram',
   margins = 'both',
-  xparams = list(bins=50),
-  yparams = list(bins=50),
+  xparams = list(bins=30),
+  yparams = list(bins=30),
   size = 10,
   colour = 'gray20',
   fill = '#6699cc'
 )
-
 
 plot_m
 ggsave(filename="NBW_BLW_compare_plot.png", plot=plot_m,width=9,height=7,dpi=2000)
