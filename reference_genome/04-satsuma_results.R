@@ -310,12 +310,14 @@ library(ggplot2)
 library(ggExtra)
 library(reshape2)
 library(ggrepel)
+library(tidyverse)
 
 chr_lengths <- read.csv("NBW_BLW_compare_chrlengths.csv", header=TRUE)
 
-plot <- ggplot(chr_lengths, aes(nbw_proportion, blw_proportion)) +
+plot <- ggplot(data=chr_lengths,aes(nbw_proportion, blw_proportion, label=chr)) +
   geom_abline(slope=1, intercept=0, linetype="dotted", col="gray50")+
   geom_point(size=2.5, col="#00008b", alpha=0.8, pch=16) + 
+  geom_point(data = chr_lengths %>% filter(chr == "chrx" | chr == "chry"), size=2.5,pch=16, color = "orange", alpha=0.8) +  
   theme_bw() +
   geom_label_repel(aes(label=chr), max.overlaps = 20)+
   xlab("NBW genome proportion")+
@@ -334,3 +336,4 @@ plot_m <- ggExtra::ggMarginal(
 
 plot_m
 ggsave(filename="NBW_BLW_compare_plot.png", plot=plot_m,width=9,height=7,dpi=2000)
+
