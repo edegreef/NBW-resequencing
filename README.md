@@ -3,8 +3,9 @@
 This is a repository for scripts used in analyzing northern bottlenose whale (*Hyperoodon ampullatus*) resequencing data. These scripts were executed on computing resources through the University of Manitoba and Compute Canada. Project is a collaboration with the Marine Gene Probe Lab & Whitehead Lab at the Dalhousie University and the University of Manitoba.
 <br/>
 ### Reference genome folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/reference_genome)
-* Evaluated genome quality with *QUAST*, *Assemblathon*, *BUSCO*)
-* Mapped chromosome alignment (synteny with *Satsuma*)
+* Evaluated genome quality with *QUAST*, *Assemblathon*, *BUSCO*
+* Mapped chromosome alignment through synteny with *Satsuma*
+* Annotated genome with *MAKER* and added functional annotations with *BLAST+* and *Interproscan*
 
 ### Resequencing data folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/resequencing_data)
 #### Initial SNP prep
