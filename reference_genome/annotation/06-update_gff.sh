@@ -56,7 +56,7 @@ awk '{print $3}' NBW_ref_051018_round4.gmod.blastp.iperscan.gff  > see_3rdcol.tx
 awk '{ if ($3!="protein_match" && $3!="match_part" && $3!="match") { print } }' NBW_ref_051018_round4.gmod.blastp.iperscan.gff > NBW_ref_051018_round4.gmod.blastp.iperscan.annot.gff
 
 # b/c many contigs in genome and no rna, the annotation won't be complete so I am using a strict AED filter to remove false-positives
-perl quality_filter.pl -a 0.25 NBW_ref_051018_round4.gmod.blastp.iperscan.annot.gff > NBW_ref_051018_round4.gmod.blastp.iperscan.annot.filter.gff
+#perl quality_filter.pl -a 0.25 NBW_ref_051018_round4.gmod.blastp.iperscan.annot.gff > NBW_ref_051018_round4.gmod.blastp.iperscan.annot.filter.gff
 
 # look at gene/stats count again
-cat NBW_ref_051018_round4.gmod.blastp.iperscan.annot.filter.gff | awk '{a[$3]++}END{for(k in a){print k,a[k]}}'
+#cat NBW_ref_051018_round4.gmod.blastp.iperscan.annot.filter.gff | awk '{a[$3]++}END{for(k in a){print k,a[k]}}'
