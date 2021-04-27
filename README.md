@@ -36,3 +36,4 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 * Ran *ADMIXTURE* with shell script
 * Filtered beagle file to match snp sites and then ran *NGSadmix*
 * Compared ancestral admixture analyses together in R
+* Estimated changes in effective population sizes with *SMC++* and *PSMC*
