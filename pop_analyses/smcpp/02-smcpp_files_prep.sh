@@ -20,25 +20,28 @@ smc++ {options}
 
 # prep input files
 # use vcf that is filtered for quality but not MAF yet. Also using autosomes only.
-# planning to use NBW_platypus_SNPs.filter1.ID.biallel.autosomes.miss04.n36.scafmin100kb.vcf.gz file
+# planning to use NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.37.min100kb.vcf.gz file
 
 # make vcf of snps that were filted from the raw file for creating a mask file
 # will need to run the ID.sh script to match contig and sample IDs
-./04-edit_label_ID.sh NBW_platypus_allvariantcalls.vcf.gz
+# going back to biology-01 server
+./04-edit_label_ID.sh #NBW_platypus_allvariantcalls.vcf
 
-# zip
-bgzip NBW_platypus_allvariantcalls.ID.vcf
-tabix -p vcf NBW_platypus_allvariantcalls.ID.vcf.gz
+# zip # oops can just skip this since will zip later..
+bgzip NBW2_allvariantcalls_2mergedbam.ID.vcf
+tabix -p vcf NBW2_allvariantcalls_2mergedbam.ID.vcf.gz
 
 # filter individuals from raw file to keep consistent
-vcftools --gzvcf NBW_platypus_allvariantcalls.ID.vcf.gz --remove remove_8highmiss_5kinpair --recode --recode-INFO-all --out NBW_platypus_allvariantcalls.ID.n36
+vcftools --gzvcf NBW2_allvariantcalls_2mergedbam.ID.vcf.gz --remove 7highmiss_1dup_4kin --recode --recode-INFO-all --out NBW2_allvariantcalls_2mergedbam.ID.37
+
+mv NBW2_allvariantcalls_2mergedbam.ID.37.recode.vcf NBW2_allvariantcalls_2mergedbam.ID.37.vcf
 
 # zip 
-bgzip NBW_platypus_allvariantcalls.ID.n36.vcf
-tabix -p vcf NBW_platypus_allvariantcalls.ID.n36.vcf.gz
+bgzip NBW2_allvariantcalls_2mergedbam.ID.37.vcf
+tabix -p vcf NBW2_allvariantcalls_2mergedbam.ID.37.vcf.gz
 
 # now make vcf of filtered out sites
-/home/degreefe/programs/bcftools-1.9/bcftools isec -p isec_filteredout NBW_platypus_allvariantcalls.ID.n36.vcf.gz NBW_platypus_SNPs.filter1.ID.biallel.autosomes.miss04.n36.min100kb.vcf.gz
+/home/degreefe/programs/bcftools-1.9/bcftools isec -p isec_filteredout NBW2_allvariantcalls_2mergedbam.ID.37.vcf.gz NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.37.min100kb.vcf.gz
 
 # isec_filteredout/0000.vcf is the one we want (snps that were filtered out)
 cp isec_filteredout/0000.vcf 0000.vcf
@@ -48,9 +51,9 @@ mv 0000.vcf smcpp_removed_sites.vcf
 
 # make list of contigs from vcf file
 #gunzip -c NBW_platypus_allvariantcalls.ID.n36.vcf.gz 
-gunzip -c NBW_platypus_SNPs.filter1.ID.biallel.autosomes.miss04.n36.min100kb.vcf.gz > NBW_platypus_SNPs.filter1.ID.biallel.autosomes.miss04.n36.min100kb.vcf
+gunzip -c NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.37.min100kb.vcf.gz > NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.37.min100kb.vcf
 #grep -v "^#" NBW_platypus_allvariantcalls.ID.n36.vcf | cut -f1 | sort | uniq > unfiltered_contig_list.txt​
-grep -v "^#" NBW_platypus_SNPs.filter1.ID.biallel.autosomes.miss04.n36.min100kb.vcf | cut -f1 | sort | uniq > filtered_contig_list.txt​
+grep -v "^#" NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.37.min100kb.vcf | cut -f1 | sort | uniq > filtered_contig_list.txt​
 
 # making bed file for masking
 # install bedops
@@ -82,13 +85,12 @@ tabix -p bed smcpp_removed_sites_sorted.bed.gz
 # use this final bed file in --mask for SMC++ vcf2smc. 
 # transfering input files to cedar cluster now to run SMC++ things on arrays
 
-# need to add contig lengths to vcf header (I guess the bcftools I installed on biology-01 doesn't have the -f option so just going to do this on cedar)
-module load nixpkgs/16.09 intel/2018.3 bcftools/1.10.2
+# need to add contig lengths to vcf header (I guess the bcftools I installed on biology-01 doesn't have the -f option so just going to do this on graham)
+module load StdEnv/2020 gcc/9.3.0 bcftools/1.13
 
 # -f file is the reference genome index file. "contig" because I just added the word 'contig' to each contig to match vcf names
-bcftools reheader -f contig_fai.fai NBW_platypus_SNPs.filter1.ID.biallel.autosomes.miss04.n36.min100kb.vcf.gz -o smcpp_input_min100kb_contigheader.vcf.gz
-tabix -p vcf smcpp_input_min100kb_contigheader.vcf.gz
+bcftools reheader -f contig_fai.fai NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.37.min100kb.vcf.gz -o smcpp_snps_input.vcf.gz
+tabix -p vcf smcpp_snps_input.vcf.gz
 
 # next run vcf2smc script
 # max jobs at a time on cedar is 1000, also finding out that max array range, cannot go past 9999.. So will just use a loop instead. 
-
