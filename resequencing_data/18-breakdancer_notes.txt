@@ -1,0 +1,12 @@
+# Lost my notes for breakdancer, but recreating here
+#(http://breakdancer.sourceforge.net/pipeline.html)
+
+# First thing, I combined 10 samples to make one large bam file using 'samtools merge'. Breakdancer can take merged bam files as long as header and records have RG info. 
+
+# Downloaded BreakDancer-1.3.6
+
+# Next step, create configuration file with bam2cfg.pl
+/home/degreefe/programs/build/bin/bam2cfg.pl -g -h sample.bam > config_out.cfg
+
+# Second step, detect regions of structural variants
+/home/degreefe/programs/build/bin/breakdancer-max -t -q 10 -d output.ctx config_out.cfg > output.ctx
