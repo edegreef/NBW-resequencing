@@ -2,8 +2,8 @@
 
 # looking at snp statistics
 
-all_variants=/home/degreefe/NBW/reseq_newsnps/NBW_platypus_allvariantcalls
-snps=/home/degreefe/NBW/reseq_newsnps/NBW_platypus_SNPs
+all_variants=/home/degreefe/NBW/snps_withmerged/NBW2_allvariantcalls_2mergedbam
+snps=/home/degreefe/NBW/snps_withmerged/NBW2_SNPS_2M
 
 # filter out indels 
 vcftools --vcf $all_variants.vcf --remove-indels --recode --recode-INFO-all --out $snps
@@ -27,17 +27,3 @@ vcftools --gzvcf $snps.vcf.gz --out $snps --missing-site
 
 # assess sites for Hardy-Weinberg Equilibrium (outputs .hwe file)
 vcftools --gzvcf $snps.vcf.gz --out $snps --hardy
-
-
-## some notes below for GATK snp info, but ended up using outputs from bcftools and vcftools
-#reference=/home/degreefe/NBW/reference/Northern_bottlenose_whale_051018_shortLabel.fasta
-
-# make .dict and .fai file for reference genome
-#java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar CreateSequenceDictionary -R $reference
-#samtools faidx $reference
-
-# make index (.tbi) file for vcf
-#java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar IndexFeatureFile -I $snps.vcf.gz
-
-# create variants table of snp info prior to filtering
-#java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar VariantsToTable -V $snps.vcf.gz -F CHROM -F POS -F QUAL -F MQ -F QD -F TC -F FR --show-filtered -O $snps.tab
