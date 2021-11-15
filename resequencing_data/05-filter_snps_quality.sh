@@ -3,33 +3,36 @@
 # 1) First round of filtering, for QUAL, MQ, QD
 
 # Gatk seemed to run better when going through each filtering criteria one at a time and on command line (crashed if I combined them, not sure why)
+# need reference genome .dict file in same directory as reference fasta
 
-# filtering out QUAL < 20
-java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar VariantFiltration -R /home/degreefe/NBW/reference/Northern_bottlenose_whale_051018_shortLabel.fasta -V NBW_platypus_SNPs.vcf.gz -O NBW_platypus_SNPs.QUAL.vcf.gz --filter-name "QUALlt20" --filter-expression "QUAL < 20" 
+# Filter out QUAL < 20
+java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar VariantFiltration -R /home/degreefe/NBW/ref_genome/Northern_bottlenose_whale_051018_shortLabel.fasta -V NBW2_SNPS_2M.vcf.gz -O NBW2_SNPS_2M.QUAL.vcf.gz --filter-name "QUALlt20" --filter-expression "QUAL < 20" 
 
-# switching to SelectVariants function for next filter steps because the VariantFiltration does not exclude NAs
-# fitering out MQ < 30
-java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar SelectVariants -R /home/degreefe/NBW/reference/Northern_bottlenose_whale_051018_shortLabel.fasta -V NBW_platypus_SNPs.QUAL.vcf.gz -O NBW_platypus_SNPs.QUAL.MQ.vcf.gz -select "MQ >= 30.0"
+# Switching to SelectVariants function for next filter steps because the VariantFiltration does not exclude NAs
+# Filter out MQ < 30
+java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar SelectVariants -R /home/degreefe/NBW/ref_genome/Northern_bottlenose_whale_051018_shortLabel.fasta -V NBW2_SNPS_2M.QUAL.vcf.gz -O NBW2_SNPS_2M.QUAL.MQ.vcf.gz -select "MQ >= 30.0"
 
-# filtering out QD < 2
-java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar SelectVariants -R /home/degreefe/NBW/reference/Northern_bottlenose_whale_051018_shortLabel.fasta -V NBW_platypus_SNPs.QUAL.MQ.vcf.gz -O NBW_platypus_SNPs.QUAL.MQ.QD.vcf.gz -select "QD >= 2.0"
+# Filter out QD < 2
+java -jar /home/degreefe/programs/gatk-4.1.9.0/gatk-package-4.1.9.0-local.jar SelectVariants -R /home/degreefe/NBW/ref_genome/Northern_bottlenose_whale_051018_shortLabel.fasta -V NBW2_SNPS_2M.QUAL.MQ.vcf.gz -O NBW2_SNPS_2M.QUAL.MQ.QD.vcf.gz -select "QD >= 2.0"
 
-# clean up files
-mv NBW_platypus_SNPs.QUAL.MQ.QD.vcf.gz NBW_platypus_SNPs.filter1.vcf.gz
-mv NBW_platypus_SNPs.QUAL.MQ.QD.vcf.gz.tbi NBW_platypus_SNPs.filter1.vcf.gz.tbi
-rm NBW_platypus_SNPs.QUAL*
+# Clean up files
+mv NBW2_SNPS_2M.QUAL.MQ.QD.vcf.gz NBW2_SNPS_2M.filter1.vcf.gz
+mv NBW2_SNPS_2M.QUAL.MQ.QD.vcf.gz.tbi NBW2_SNPS_2M.filter1.vcf.gz.tbi
+rm NBW2_SNPS_2M.QUAL*
 
 
-# 2) Second round of filtering, for max missingness, minor allele count, and non-biallelic sites
+# 2) Second round of filtering, for max missingness, non-biallelic sites
 
-# missingness (in vcftools 1=no missing, 0=all missing)
-vcftools --gzvcf NBW_platypus_SNPs.filter1.vcf.gz --max-missing 0.6 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.miss
+# Filter out snps with high missingness (in vcftools 1=no missing, 0=all missing)
+vcftools --gzvcf NBW2_SNPS_2M.filter1.vcf.gz --max-missing 0.6 --recode --recode-INFO-all --out NBW2_SNPS_2M.filter1.miss
 
-# minor allele count
-vcftools --vcf NBW_platypus_SNPs.filter1.miss.recode.vcf --mac 2 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.miss.mac
+# Remove non-biallelic sites
+vcftools --vcf NBW2_SNPS_2M.filter1.miss.recode.vcf --min-alleles 2 --max-alleles 2 --recode --recode-INFO-all --out NBW2_SNPS_2M.filter1.miss.biallel
 
-# remove non-biallelic sites
-vcftools --vcf NBW_platypus_SNPs.filter1.miss.mac.recode.vcf --min-alleles 2 --max-alleles 2 --recode --recode-INFO-all --out NBW_platypus_SNPs.filter1.miss.mac.biallel
+mv NBW2_SNPS_2M.filter1.miss.biallel.recode.vcf NBW2_SNPS_2M.filter1.miss.biallel.vcf
 
-mv NBW_platypus_SNPs.filter1.miss.mac.biallel.recode.vcf NBW_platypus_SNPs.filter1.filter2.vcf
-rm NBW_platypus_SNPs.filter1.miss*
+
+# Going to filter Minor allele count later, will need to remove autosomes and structural variants next (need to keep MAC for smcpp)
+# Filter out minor allele count 2
+#vcftools --vcf $snps.vcf --mac 2 --recode --recode-INFO-all --out $snps.mac
+
