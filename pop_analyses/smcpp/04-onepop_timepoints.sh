@@ -7,13 +7,11 @@
 #SBATCH --job-name=estimate_SS
 
 # 20 array runs/iterations of 'smc++ estimate' for a population (this script is for one pop, run script for each pop separately)
-# AR, IC, LB, NF, SS
 # also remember to make the folders first ("smc_out_timepoints" a folder for each pop ID)
 
 pop=SS
 
 source /home/edegreef/smcpp/bin/activate
-
 
 mkdir /scratch/edegreef/SMC_min100kb/smc_out_timepoints/$pop/run_${SLURM_ARRAY_TASK_ID}/
 
