@@ -1,13 +1,13 @@
-# looking at kinship estimates
+# Looking at kinship estimates with plink output
 
 library(plinkQC)
 
-setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/reseq_newsnps/kinship")
-
-directory="C:/Users/Evelien de Greef/Dropbox/NBW-me/reseq_newsnps/kinship"
-files="NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.rm8highmiss" ##for .genome and .imiss
+directory="C:/Users/eveli/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/kinship"
+files="NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.42" ##for .genome and .imiss
   
-png("IBD_autosomes_LDpruned_rm8highmiss_plinkQC_plot.png", w=1000, h=500, res=100)
+# Quick plot
+
+png("plinkQC_NBW2_SNPS_2M_42.png", w=1000, h=500, res=100)
 evaluate_check_relatedness(
   qcdir=directory,
   name=files,
@@ -18,17 +18,17 @@ evaluate_check_relatedness(
 )
 dev.off()
  
-# extract values for the related individuals from the .genome file (filtering by pi_hat values)
+# Extract values for the related individuals from the .genome file (filtering by pi_hat values)
 IBD <- read.table(paste(directory,"/", files,".genome", sep=""), header=T)
 IBD_order_PH <- IBD[order(IBD[,10], decreasing=TRUE),]
-write.csv(IBD_order_PH, "IBD_autosomes_LDpruned_rm8highmiss_PIHAT.csv")
+write.csv(IBD_order_PH, "IBD_NBW2_SNPS_2M_42_PIHAT.csv")
 
-# make nicer histogram, also remove duplicate so we are just looking at real kins:
-# remove duplicate: Hyam-2016-06-pooled & NBW-2016-06 --remove row123. 
-IBD_2 <- IBD[-123,]
+# Make nicer histogram, also remove duplicate so we are just looking at real kins:
+# Remove duplicate: Hyam-2016-06-pooled & NBW-2016-06 --remove row123. 
+# IBD_2 <- IBD[-123,]
 
-# order by pi_hat and then add nrow (for pair#s)
-IBD_2 <- IBD_2[order(IBD_2[,10], decreasing=TRUE),]
+# Order by pi_hat and then add nrow (for pair#s)
+IBD_2 <- IBD[order(IBD[,10], decreasing=TRUE),]
 IBD_2$pair <- 1:nrow(IBD_2)
 
 library(ggplot2)
@@ -37,7 +37,8 @@ ggplot(data=IBD_2, aes(x=PI_HAT))+
   theme_bw()+
   ylab("number of pairs")+
   xlab("pi hat")
-ggsave("IBD_geomhistogram.png", width=6,height=4.5,dpi=300)
+ggsave("IBD_NBW2_SNPS_2M_42_geomhistogram.png", width=6,height=4,dpi=300)
+
 
 
 # PI_HAT value reference:
