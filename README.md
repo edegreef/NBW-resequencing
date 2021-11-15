@@ -8,7 +8,7 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 * Annotated genome with *MAKER* and added functional annotations with *BLAST+* and *Interproscan*
 
 ### Resequencing data folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/resequencing_data)
-### Processing sequencing data
+#### Processing sequencing data
 01. Trimmed fastqs with *trimmomatic*
 02. Mapped fastqs to reference genome with *bwa*
 03. Removed duplicate reads with *picard*
