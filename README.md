@@ -8,23 +8,30 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 * Annotated genome with *MAKER* and added functional annotations with *BLAST+* and *Interproscan*
 
 ### Resequencing data folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/resequencing_data)
+### Processing sequencing data
+01. Trimmed fastqs with *trimmomatic*
+02. Mapped fastqs to reference genome with *bwa*
+03. Removed duplicate reads with *picard*
+04. Added readgroups with *picard*
+05. Checked modal coverage of all the samples
+06. Downsampled some bams with *GATK* to maintain a consistent modal coverage before calling snps
+07. Merged sequence files for two individuals to increase coverage
 #### Initial SNP prep
-01. Lowered variation in sample coverage, and checked modal coverage with `bam_coverage.sh` (all samples were assess for modal coverage before downsampling, then checked again afterwards).
-02. Called variants from bams and reference genome using *Platypus*
-03. Removed indels then extracted snp metrics with *bcftools* and *vcftools*
-04. Looked at snp metrics in *R*
-05. Filtered snps based on quality with *GATK* and *vcftools*
-06. Used *bcftools* to edit sample ID label (removing the path in each sample ID name) and to add word "contig" to each scaffold name so data can be used in downstream analyses that won't take data with an interger as scaffold name.
+08. Called variants from bams and reference genome using *Platypus*
+09. Removed indels then extracted snp metrics with *bcftools* and *vcftools*
+10. Looked at snp metrics in *R*
+11. Filtered snps based on quality with *GATK* and *vcftools*
+12. Used *bcftools* to edit sample ID label (removing the path in each sample ID name) and to add word "contig" to each scaffold name so data can be used in downstream analyses that won't take data with an interger as scaffold name.
 #### Sex chromosomes
-07. Notes on using *DifCover* for coverage comparisons between males and females
-08. Examined *DifCover* results in R
-09. Used *bedtools* to make annotated bed file with X and Y regions 
-10. Finalized list of sex scaffolds in R
+13. Notes on using *DifCover* for coverage comparisons between males and females
+14. Examined *DifCover* results in R
+15. Used *bedtools* to make annotated bed file with X and Y regions 
+16. Finalized list of sex scaffolds in R
 #### More SNP prep
-11. Filtered X and Y-linked SNPs. Used *bcftools* to create vcfs of X and Y snps, then used CHROM and POS information from those vcfs to filter out X and Y snps in full snp set using *vcftools*. Also made a separate file with LD-pruned snps using `LD_pruning.sh`.
-12. Filtered out some individuals with very high missing data and ran pairise kinship estimates using *plink*.
-13. Examined kinship results in *R* to identify kin pairs.
-14. Removed an individual from each kin pair, and prepped snp files for pop analyses. 
+17. Filtered X and Y-linked SNPs. Used *bcftools* to create vcfs of X and Y snps, then used CHROM and POS information from those vcfs to filter out X and Y snps in full snp set using *vcftools*. Also made a separate file with LD-pruned snps using `LD_pruning.sh`.
+18. Note on running *breakdancer* to detect structural variants.
+19. Examining structural variant regions in R and creating a list from vcf positions for filtering.
+20. a) Filtered out some individuals with very high missing data and ran pairise kinship estimates using *plink*. b) Examined kinship results in *R* to identify kin pairs. c) Removed an individual from each kin pair, and prepped snp files for pop analyses. 
 
 ### Population analyses folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/pop_analyses)
 * Made site map including ocean depth using a variety of *R* packages
