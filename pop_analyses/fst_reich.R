@@ -87,14 +87,14 @@ library(adegenet)
 library(vcfR)
 library(tidyverse)
 
-setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/reseq_newsnps/fst_reich")
+setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/fst")
 
 # read in vcfs for each pop 
-vcf_arctic <- read.vcfR("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.arctic.vcf.gz") 
-vcf_iceland <- read.vcfR("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.iceland.vcf.gz") 
-vcf_labrador <- read.vcfR("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.labrador.vcf.gz") 
-vcf_newfoundland <- read.vcfR("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.newfoundland.vcf.gz") 
-vcf_scotianshelf <- read.vcfR("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.scotianshelf.vcf.gz") 
+vcf_arctic <- read.vcfR("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.arctic.vcf.gz") 
+vcf_iceland <- read.vcfR("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.iceland.vcf.gz") 
+vcf_labrador <- read.vcfR("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.labrador.vcf.gz") 
+vcf_newfoundland <- read.vcfR("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.newfoundland.vcf.gz") 
+vcf_scotianshelf <- read.vcfR("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.scotianshelf.vcf.gz") 
 
 # convert vcf to genlight object
 genlight_arctic <- vcfR2genlight(vcf_arctic)
@@ -147,11 +147,11 @@ allele_count_newfoundland <- mat_newfoundland %>% select(c(x0,x1,x2))
 allele_count_scotianshelf <- mat_scotianshelf %>% select(c(x0,x1,x2))
 
 # get the allele infos (A/T/G/C), read vcfs as tables
-table_arctic <- read.table("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.arctic.vcf.gz")
-table_iceland <- read.table("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.iceland.vcf.gz")
-table_labrador <- read.table("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.labrador.vcf.gz")
-table_newfoundland <- read.table("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.newfoundland.vcf.gz")
-table_scotianshelf <- read.table("NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36.scotianshelf.vcf.gz")
+table_arctic <- read.table("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.arctic.vcf.gz")
+table_iceland <- read.table("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.iceland.vcf.gz")
+table_labrador <- read.table("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.labrador.vcf.gz")
+table_newfoundland <- read.table("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.newfoundland.vcf.gz")
+table_scotianshelf <- read.table("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37.scotianshelf.vcf.gz")
 
 # extracting the common allele (A1) and variant allele (A2) 
 variants_arctic <- table_arctic %>% select(c(V4,V5))
@@ -190,16 +190,16 @@ fst_LB_SS <- Reich.Fst(pop_labrador, pop_scotianshelf, call.rate=0.75, top.numbe
 fst_NF_SS <- Reich.Fst(pop_newfoundland, pop_scotianshelf, call.rate=0.75, top.number=10)
 
 # take a look at results
-fst_AR_IC #0.00186469967757692
-fst_AR_LB #0.00498607518684294
-fst_AR_NF #0.00342881375505627
-fst_AR_SS #0.00500886399304484
-fst_IC_LB #0.00981348345972794
-fst_IC_NF #0.00718047349843449
-fst_IC_SS #0.00835375967193776
-fst_LB_NF #0.00344218534979232
-fst_LB_SS #0.00875233348060209
-fst_NF_SS #0.00577924893510587
+fst_AR_IC #0.0044668074487502
+fst_AR_LB #0.00348639995077524
+fst_AR_NF #0.00348639995077524
+fst_AR_SS #0.00795411534952307
+fst_IC_LB #0.00978923539254032
+fst_IC_NF #0.00828351161628797
+fst_IC_SS #0.0104239348934766
+fst_LB_NF #0.00353676945870719
+fst_LB_SS #0.0100488019039871
+fst_NF_SS #0.00717667192101823
 
 # save results in a thing
 a <- data.frame(matrix(unlist(fst_AR_IC[1]), nrow=length(fst_AR_IC[1]), byrow=TRUE))
@@ -220,4 +220,4 @@ pair <- data.frame(c("AR-IC", "AR-LB", "AR-NF", "AR-SS", "IC-LB", "IC-NF", "IC-S
 fst_together <- cbind(pair, merged)
 colnames(fst_together) <- c("pair", "Reich_fst", "ll_95CI", "ul_95CI", "p_val")
 
-write.csv(fst_together, "Reichs_fst_output.csv")
+write.csv(fst_together, "Reichs_fst_output_NBW2_SNPS_2M.csv")
