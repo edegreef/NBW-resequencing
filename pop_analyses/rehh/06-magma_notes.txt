@@ -1,0 +1,19 @@
+
+# Notes on how to use magma
+magma --annotate --snp-loc [SNPLOC_FILE] --gene-loc [GENELOC_FILE] --out [ANNOT_PREFIX]
+
+SNPLOC = snp locations (3 columns: SNP ID, chrom, position)
+GENELOC = gene locations (4 columns: gene ID, chrom, start site, stop site)
+
+#biology-01
+
+genloc: NBW.genes.formagma2.txt
+
+# Remove "contig" in the chr list for snp loc file.
+awk '{ gsub(/contig/,"", $2); print } ' NOR_snplist_log1.3 > NOR_snplist_log1.3_name
+awk '{ gsub(/contig/,"", $2); print } ' SS_snplist_log1.3 > SS_snplist_log1.3_name
+
+
+/home/degreefe/programs/magma --annotate nonhuman window=20,20 --snp-loc NOR_snplist_log1.3_name  --gene-loc NBW.genes.formagma2.txt --out NOR_log1.3_magma_annotation
+
+/home/degreefe/programs/magma --annotate nonhuman window=20,20 --snp-loc SS_snplist_log1.3_name --gene-loc NBW.genes.formagma2.txt --out SS_log1.3_magma_annotation
