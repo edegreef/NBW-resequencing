@@ -4,9 +4,9 @@
 
 # first need to prep vcfs for each pop as well as 'all pops minus target pop'
 
-cd /home/degreefe/NBW/reseq_newsnps/samplesizes/isec
+cd /home/degreefe/NBW/snps_2M/snp_overlaps
 
-snps=NBW_platypus_SNPs.filter1.filter2.ID.autosomes.LDpruned.n36
+snps=NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned.37
 
 # making vcfs by pop
 vcftools --vcf $snps.vcf --recode --recode-INFO-all --keep pop_arctic --out $snps.arctic
