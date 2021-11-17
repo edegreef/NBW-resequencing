@@ -22,7 +22,7 @@ map.outline = getMap(resolution = "high")
 # Crop to boundary and convert to dataframe
 map.outline = crop(map.outline, y = boundary) %>% fortify()
 
-# Download ocean depth map
+# Download ocean depth map. Lower resolution number is more fine-scale.
 ocean_map <- getNOAA.bathy(lon1 = -75, lon2 = 5, lat1 = 37, lat2 = 73, resolution = 4)
 
 # Load site info
@@ -40,10 +40,10 @@ nbw_map_ocean <- autoplot(ocean_map, geom=c("raster")) +
   theme(legend.position="none")+
   ylab("Latitude (°N)")+
   xlab("Longitude (°W)")+
-  theme(panel.border = element_rect(colour = "black", fill=NA, size=1))+
+  theme(panel.border = element_rect(colour = "ablack", fill=NA, size=1))+
   #ggsn::north(map.outline, symbol = 10, scale = 0.06, location = "topleft")+
   ggsn::scalebar(data = map.outline, dist = 500, dist_unit = "km", height = 0.01,
-                 transform = TRUE, model = "WGS84", family="Times New Roman",
+                 transform = TRUE, model = "WGS84", family="serif",
                  location = "bottomleft", anchor = c(x = -70, y = 38),
                  st.bottom = FALSE, st.size = 2.5, st.dist = 0.015)+
   annotate("text", x=-28, y=45, label= "North Atlantic Ocean",fontface="italic", size=4, color="black",family="serif")+
