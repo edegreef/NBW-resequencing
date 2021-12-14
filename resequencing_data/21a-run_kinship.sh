@@ -1,13 +1,8 @@
-# Notes on filtering out SVs and running kinship
+# Notes on some file prep and running kinship
 
-snps=NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes
-SV_list=SV_withpart2_CHROMPOS
+snps=NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV
 high_miss=7highmiss_1dup
 n=41
-
-# Filter out structural variants
-vcftools --gzvcf $snps.vcf.gz --exclude-positions $SV_list --recode --recode-INFO-all --out $snps.SV
-mv $snps.SV.recode.vcf $snps.SV.vcf
 
 # SNPs for pop structure need to filter MAC2 and LD pruned
 vcftools --vcf $snps.SV.vcf --mac 2 --recode --recode-INFO-all --out $snps.SV.mac
