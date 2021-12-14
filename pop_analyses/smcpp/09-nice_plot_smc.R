@@ -6,7 +6,7 @@ library(dplyr)
 library(patchwork)
 library(RColorBrewer)
 
-setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/smcpp")
+setwd("C:/Users/eveli/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/smcpp")
 
 # Doing 5-group first
 AR <- read.csv("smc_AR_plot.csv", header=T)
@@ -218,14 +218,14 @@ smc_all
 #smc_all / smc
 #ggsave("SMC_plots_ALL_5group_2_noLGM.png", width=7,height=7.5,dpi=1000)
 
-############## 4-group (AR, IC, LB+NF, SS)
-AR <- read.csv("smc_AR_plot.csv", header=T)
+############## 3/4-group (AR, IC, (optionally)LB+NF, SS)
+AR <- read.csv("smc_ARLBNF_group_plot.csv", header=T)
 IC <- read.csv("smc_IC_plot.csv", header=T)
-LBNF <- read.csv("smc_LBNFNF_plot.csv", header=T)
+#LBNF <- read.csv("smc_LBNFNF_plot.csv", header=T)
 SS <- read.csv("smc_SS_plot.csv", header=T)
 
 # Merge
-runs <- rbind(IC,AR, LBNF, SS)
+runs <- rbind(IC,AR, SS)
 
 # add unique id for label+run
 runs$plot_id <- paste(runs$label, runs$plot_num, sep="_")
@@ -235,10 +235,10 @@ gen=17.8
 mu=1.53e-8
 
 #group_colors <- c(IC="#4575B4",AR="#ABD9E9", LB="#FEE090", NF="#F46D43", SS="#A50026")
-group_colors <- c(IC="#4575B4",AR="#ABD9E9", LBNF="#F46D43", SS="#A50026")
+group_colors <- c(IC="#4575B4",ARLBNF="#ABD9E9", SS="#A50026")
 
 # Adjust order to make legend by latitude
-runs$label <- factor(runs$label, levels = c("IC", "AR", "LBNF", "SS"))
+runs$label <- factor(runs$label, levels = c("IC", "ARLBNF", "SS"))
 
 # Quick test plot in ggplot
 ggplot()+
@@ -258,12 +258,12 @@ IC_med$label <- "IC"
 AR <- AR %>% group_by(plot_num) %>% mutate(row=row_number())
 AR_med <- aggregate(AR[,c("x","y")], list(AR$row), FUN=median)
 colnames(AR_med)[1] <- "row"
-AR_med$label <- "AR"
+AR_med$label <- "ARLBNF"
 
-LBNF <- LBNF %>% group_by(plot_num) %>% mutate(row=row_number())
-LBNF_med <- aggregate(LBNF[,c("x","y")], list(LBNF$row), FUN=median)
-colnames(LBNF_med)[1] <- "row"
-LBNF_med$label <- "LBNF"
+#LBNF <- LBNF %>% group_by(plot_num) %>% mutate(row=row_number())
+#LBNF_med <- aggregate(LBNF[,c("x","y")], list(LBNF$row), FUN=median)
+#colnames(LBNF_med)[1] <- "row"
+#LBNF_med$label <- "LBNF"
 
 SS <- SS %>% group_by(plot_num) %>% mutate(row=row_number())
 SS_med <- aggregate(SS[,c("x","y")], list(SS$row), FUN=median)
@@ -271,10 +271,10 @@ colnames(SS_med)[1] <- "row"
 SS_med$label <- "SS"
 
 # Merge
-MED <- rbind(IC_med,AR_med, LBNF_med, SS_med)
+MED <- rbind(IC_med,AR_med, SS_med)
 
 # adjust label order by latitude (for legend)
-MED$label <- factor(MED$label, levels = c("IC","AR", "LBNF", "SS"))
+MED$label <- factor(MED$label, levels = c("IC","ARLBNF", "SS"))
 
 # Plot all runs + median in ggplot, also log scaling the y axis
 smc<-ggplot()+
@@ -298,7 +298,7 @@ smc<-ggplot()+
   labs(color="Region")
 smc
 
-ggsave("SMC_plot_4group.png", width=7,height=4,dpi=1000)
+ggsave("SMC_plot_3group_IC_ARLBNF_SS.png", width=7,height=4,dpi=1000)
 
 smc_all / smc
-ggsave("SMC_1group_4group.png", width=5.5,height=6,dpi=1000)
+ggsave("SMC_1group_3group_IC_ARLBNF_SS.png", width=5.5,height=6,dpi=1000)
