@@ -49,13 +49,6 @@ head(qlong_snmf)
 
 
 ######### add this bit for sample axis if want to add sample ID to k3 plot, otherwise skip and save for K5.
-# add individual IDs
-snmf_q$Ind = sample_info$pop_order
-
-# convert dataframe to long format
-qlong_snmf = melt(snmf_q, id.vars=c("Ind"))
-head(qlong_snmf)
-
 sample_axis <- as.vector(sample_info2$sample)
 ##########
 
