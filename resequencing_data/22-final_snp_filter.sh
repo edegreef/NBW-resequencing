@@ -2,7 +2,7 @@
 # After identifying kinship pairs and deciding which individuals of each pair to remove
 
 snps=NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV
-snps2=NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDpruned
+snps2=NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.LDprunedr05
 list=7highmiss_1dup_4kin
 n=37
 
