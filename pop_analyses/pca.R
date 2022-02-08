@@ -7,81 +7,130 @@ library(pcadapt)
 library(ggplot2)
 library(patchwork)
 
-setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/pca")
+setwd("C:/Users/eveli/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/pca")
 
-# Load data
-snp_data <- read.pcadapt("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.37.bed", type = "bed")
+# load data
+snp_data <- read.pcadapt("NBW2_SNPS_2M.filter1.miss.biallel.ID.autosomes.SV.mac.37.min50kb.LDprunedr05.bed", type = "bed")
 
-# Load sample info
-sample_info <- read.csv("C:/Users/Evelien de Greef/Dropbox/NBW-me/NBW_oct2021_updated/Hyperoodon_popinfo4_reseq_Oct2021.csv", header=T)
+# load sample info
+sample_info <- read.csv("C:/Users/eveli/Dropbox/NBW-me/NBW_oct2021_updated/Hyperoodon_popinfo4_reseq_Oct2021.csv", header=T)
 
-# Filter out individuals not not in snp data
+# filter out individuals not not in snp data
 sample_info_subset <- subset(sample_info, remove!="Y")
 
-# Run pcadapt. K value will be how many eigenvectors to be produced
+# run pcadapt. K value will be how many eigenvectors to be produced
 x <- pcadapt(input = snp_data, K = 20)
 
-# Screeplot
+# screeplot
 plot(x, option = "screeplot")
 
-# Plot quick PCA
+# plot quick PCA
 plot(x, option = "scores", pop = sample_info_subset$region)
 
-# Plot other eigenvectors
-plot(x, option = "scores", i = 5, j = 6, pop = sample_info_subset$region)
+# plot other eigenvectors
+plot(x, option = "scores", i = 3, j = 4, pop = sample_info_subset$region)
 
-# Look at pca scores
+# look at pca scores
 scores <- as.data.frame(x$scores)
 
-# Look at loadings
+# look at loadings
 loadings <- as.data.frame(x$loadings)
 
-# Z scores
+# z scores
 z_scores <- as.data.frame(x$zscores)
 
-# Look at proportion variance
+# look at proportion variance
 proportion <- as.data.frame(x$singular.values)
-PC1_proportion <- (round(proportion[1,], digits=4))*100
-PC2_proportion <- (round(proportion[2,], digits=4))*100
-PC3_proportion <- (round(proportion[3,], digits=4))*100
-PC4_proportion <- (round(proportion[4,], digits=4))*100
-PC5_proportion <- (round(proportion[5,], digits=4))*100
-PC6_proportion <- (round(proportion[6,], digits=4))*100
+proportion$squared <- proportion$`x$singular.values`* proportion$`x$singular.values`
+prop_var <- as.data.frame(proportion$squared)
+PC1_proportion <- (round(prop_var[1,], digits=4))*100
+PC2_proportion <- (round(prop_var[2,], digits=4))*100
+PC3_proportion <- (round(prop_var[3,], digits=4))*100
+PC4_proportion <- (round(prop_var[4,], digits=4))*100
+PC5_proportion <- (round(prop_var[5,], digits=4))*100
+PC6_proportion <- (round(prop_var[6,], digits=4))*100
 
-# Save the scores as separate data file to adjust the pca plot for colors, etc
-evec <- cbind(sample_info_subset$Genome_ID, scores)
+# plot scree on own pref
+prop_var$num <- 1:nrow(prop_var)
+scree <- ggplot(data=prop_var, aes(x=num, y=prop_var$`proportion$squared`))+
+  geom_point()+
+  geom_line()+
+  theme_bw()+
+  ylab("Proportion of explained variance")+
+  xlab("PC")+
+  theme(text=element_text(family="serif"))
+scree
+
+ggsave("scree_plot.png", width=6, height=4.5, dpi=300)
+
+
+(nrow(x$scores) - 1) * length(x$pass)
+
+# save the scores as separate data file to adjust the pca plot for colors, etc
+evec <- cbind(sample_info_subset$code, scores)
 colnames(evec)[1] <- "sample"
-#write.csv(evec,"NBW2_SNPS_2M_pops_37.evec.csv", row.names=FALSE)
+#write.csv(evec,"NBW2_SNPS_2M_pops_37_min50kb_LDprunedr08_standardID.evec.csv", row.names=FALSE)
 
-library(ggplot2)
-library(ggrepel)
 
 # plot in ggplot
 pca <- ggplot(data=evec, aes(x=V1,y=V2))+
   geom_point(aes(color=sample_info_subset$region),size=5, alpha=0.85)+
   theme_classic()+
-  theme(legend.position = "none",
-        text=element_text(family="serif", size=14))+
+  theme(legend.position = "none")+
   theme(panel.border=element_blank(), 
         axis.line=element_line(),
         text=element_text(family="serif", size=14),
-        legend.position=c(0.88,0.88), #(0,0)=bottom left, (1,1)=top right
-        legend.background=element_rect(fill=NA, color="gray30"),
-        legend.text=element_text(size=10),
-        legend.title=element_text(size=10),
-        legend.key.size=unit(0.8,'lines'))+
-  #guides(color=guide_legend(override.aes=list(size=2)))+
+        legend.position=c(0.94,0.92), #(0,0)=bottom left, (1,1)=top right
+        legend.background=element_rect(fill=NA, color="gray80"),
+        legend.text=element_text(size=9),
+        legend.title=element_blank(),
+        legend.key.size=unit(0.05,'lines'),
+        legend.margin=margin(t=-0.1,l=0.14,b=0.14,r=0.14, unit='cm'))+
+  guides(color=guide_legend(override.aes=list(size=1.5, alpha=1), ncol=1))+
+  #ggtitle("Autosomes, min50kb scaffolds, LD pruning R2>0.5")+
+  # theme(plot.title = element_text(hjust = 0.5))+
+  #ylim(-0.35, 0.3)+
+  #xlim(-0.3,0.45)+
   xlab(paste("PC1 (", PC1_proportion, "%)", sep=""))+
   ylab(paste("PC2 (", PC2_proportion, "%)", sep=""))+
   scale_color_manual(values=c("#4575B4", "#ABD9E9", "#FEE090", "#F46D43", "#A50026"), 
                      breaks=c("Iceland", "Arctic", "Labrador", "Newfoundland", "Scotian_shelf"),
-                     labels=c("Iceland", "Arctic", "Labrador", "Newfoundland", "Scotian Shelf"))+
+                     labels=c("JM", "AR", "LB", "NF", "SS"))+
   labs(color= "Region")
-  #geom_label_repel(aes(label=sample_info_subset$Genome_ID), max.overlaps = 24)
   
 pca
 
-ggsave("PCA_NBW2_SNPS_2M_37_noprune.png", width=6, height=5, dpi=1000)
+
+pca3_4 <- ggplot(data=evec, aes(x=V3,y=V4))+
+  geom_point(aes(color=sample_info_subset$region),size=5, alpha=0.85)+
+  theme_classic()+
+  theme(legend.position = "none")+
+  theme(panel.border=element_blank(), 
+        axis.line=element_line(),
+        text=element_text(family="serif", size=14),
+        legend.position=c(0.94,0.92), #(0,0)=bottom left, (1,1)=top right
+        legend.background=element_rect(fill=NA, color="gray80"),
+        legend.text=element_text(size=9),
+        legend.title=element_blank(),
+        legend.key.size=unit(0.05,'lines'),
+        legend.margin=margin(t=-0.1,l=0.14,b=0.14,r=0.14, unit='cm'))+
+  guides(color=guide_legend(override.aes=list(size=1.5, alpha=1), ncol=1))+
+  xlab(paste("PC3 (", PC3_proportion, "%)", sep=""))+
+  ylab(paste("PC4 (", PC4_proportion, "%)", sep=""))+
+  scale_color_manual(values=c("#4575B4", "#ABD9E9", "#FEE090", "#F46D43", "#A50026"), 
+                     breaks=c("Iceland", "Arctic", "Labrador", "Newfoundland", "Scotian_shelf"),
+                     labels=c("JM", "AR", "LB", "NF", "SS"))+
+  labs(color= "Region")
+#geom_label_repel(aes(label=sample_info_subset$Genome_ID), max.overlaps = 24)
+
+pca3_4
+
+library(patchwork)
+pca + pca3_4
+# save plot (final size 6.5x6)
+
+ggsave("PCA_1-4_NBW2_SNPS_2M_37_LDprunedr05_grayline.png", width=9, height=4, dpi=1000)
+
 
 ##################
 ### Trying something out (PCA heatmap)
