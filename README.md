@@ -44,7 +44,7 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 * Ran sNMF with *LEA*, looked at results, and plotted pie chart admixture map
 * Ran *ADMIXTURE* with shell script
 * Filtered beagle file to match snp sites and then ran *NGSadmix*
-* Compared ancestral admixture analyses together in *R*
 * Estimated changes in effective population sizes with *SMC++* and *PSMC*
 * Estimated ROH with *PLINK* and plotted in *R*
+* Identified regions under selection using *rehh*
 
