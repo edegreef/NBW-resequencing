@@ -11,15 +11,15 @@ setwd("C:/Users/Evelien de Greef/Dropbox/NBW-me/NBW_oct2021_updated/snps_2M/fst"
 fst <- read.csv("Reichs_fst_output_NBW2_SNPS_2M_plus_up.csv", header=T)
 
 # edit column and row names
-colnames(fst) <- c("X", "IC", "AR", "LB", "NF", "SS")
-fst$X <- c("IC", "AR", "LB", "NF", "SS")
+colnames(fst) <- c("X", "JM", "AR", "LB", "NF", "SS")
+fst$X <- c("JM", "AR", "LB", "NF", "SS")
 
 # convert matrix to melted dataframe to use in geom_tile
 melt_fst <- melt(fst)
 
 # define order for plot axis
-x_pop_order <- c("SS", "NF", "LB", "AR", "IC")
-y_pop_order <-  c("SS", "NF", "LB", "AR", "IC")
+x_pop_order <- c("SS", "NF", "LB", "AR", "JM")
+y_pop_order <-  c("SS", "NF", "LB", "AR", "JM")
 
 fst_heatmap <- ggplot(melt_fst, aes(x=X, y=variable, fill=value)) + 
   geom_tile()+
