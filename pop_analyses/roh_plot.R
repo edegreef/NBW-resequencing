@@ -6,16 +6,15 @@
 # then plot in R!
 library(ggplot2)
 
-IC <- read.table("IC.hom.indiv", header=T)
-ARLBNF <- read.table("ARLBNF.hom.indiv", header=T)
+JM <- read.table("IC.hom.indiv", header=T)
+WNA <- read.table("ARLBNF.hom.indiv", header=T)
 SS <- read.table("SS.hom.indiv", header=T)
 
-IC$region <- "IC"
-ARLBNF$region <- "ARLBNF"
+JM$region <- "JM"
+WNA$region <- "WNA"
 SS$region <- "SS"
 
-merge <- rbind(IC, ARLBNF, SS)
-#merge <- rbind(IC, SS)
+merge <- rbind(JM, WNA, SS)
 
 set <- merge[, c("NSEG", "KB", "region")]
 
@@ -42,7 +41,7 @@ bar_NSEG <- ggplot(set, aes(x=reorder(region,NSEG), y=NSEG, fill=region))+
 bar_NSEG
 
 # adjust ARLBNF label to WNA
-labels <- c("IC", "WNA", "SS")
+labels <- c("JM", "WNA", "SS")
 
 bar_KB <- ggplot(set, aes(x=reorder(region,KB), y=KB, fill=region))+
   geom_violin(width=0.8, lwd=1)+
