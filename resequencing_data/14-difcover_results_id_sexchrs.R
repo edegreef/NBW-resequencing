@@ -13,10 +13,8 @@ scaffold_info="Northern_bottlenose_whale_051018_shortLabel.fasta.fai"
 # load in the raw data (including non-significant regions), renaming columns, and adding bp spanned
 difcover <- read_tsv(file = DNAcopyout ,col_names = F) %>% rename(scaf=X1,start=X2,stop=X3,windows=X4,"log2(Male coverage/Female coverage)"=X5) %>% mutate("bases spanned" = stop-start)
 
-# parse samtools faidx output for scaffold name and length
+# take scaffold name and lengths, then join with difcover output
 scaffold_lengths <- read_tsv(scaffold_info,col_names = c("scaf","length"))
-
-# join the two 
 proportion <- full_join(difcover,scaffold_lengths) %>% mutate(proportion = `bases spanned`/length)
 
 # plot proportion of scaffold versus log2(male/female) coverage
@@ -77,8 +75,6 @@ write.table(forbed_X, paste("X_linked_scafwindows.", type, ".bed",sep=""), sep="
 likely_Y_linked$sexchr <- "Y"
 forbed_Y <- likely_Y_linked %>% select(scaf, start, stop, sexchr)
 write.table(forbed_Y, paste("Y_linked_scafwindows.", type, ".bed",sep=""), sep="\t", row.names=FALSE,col.names=FALSE)
-
-
 
 ######## looking at same-sex control data (M1M2, F1F2):
 
