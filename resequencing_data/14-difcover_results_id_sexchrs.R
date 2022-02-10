@@ -1,5 +1,5 @@
 # Looking at DifCover output (.DNAcopyout) using male and female samples to determine X and Y linked scaffolds. Doing this for 4 male v female runs (M1F1, M1F2, M2F1, M2F2) and 2 controls (M1M2, F1F2). Script for the 2 controls towards the bottom.
-# Guidance and code help from Phil Grayson, with some modifications
+# Guidance and code help from Phil Grayson (https://github.com/phil-grayson/SexFindR), with some modifications
 
 library(tidyverse)
 
