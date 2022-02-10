@@ -1,4 +1,5 @@
 # Using rehh for haplotype analyses to identify regions under selection
+# Following vignette: https://cran.r-project.org/web/packages/rehh/vignettes/rehh.html
 # Coding help from Matt Thorstensen
 
 library(rehh)
