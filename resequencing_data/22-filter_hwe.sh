@@ -33,3 +33,8 @@ remove_2col<-remove[,1:2]
 
 # save list of snps
 write.table(remove_2col,file="tmp_HWE_filter_demoganalyses",sep="\t",quote=FALSE,row.names=F)
+
+
+# back in vcftools, use --exclde positions (example:)
+#vcftools --gzvcf NBW_SNPS_filtered_population_analyses.vcf.gz --exclude-positions tmp_HWE_filter_demoganalyses --recode --recode-INFO-all --out NBW_SNPS_filtered_demography_analyses.hwe
+
