@@ -33,7 +33,8 @@ This is a repository for scripts used in analyzing northern bottlenose whale (*H
 19. a) Examining structural variant regions in R and creating a list from vcf positions for filtering. b) filtering SVs out
 20. Filtered out small scaffolds (< 50kb).
 21. a) Filtered out  individuals with very high missing data and ran pairise kinship estimates using *plink*. b) Examined kinship results in *R* to identify kin pairs. 
-22. Removed an individual from each kin pair, and prepped snp files for pop analyses. 
+22. Filtered out snps that did not match Hardy-Weinberg Equilibrium.
+23. Removed an individual from each kin pair, and prepped snp files for pop analyses. 
 
 ### Population analyses folder: [:file_folder:](https://github.com/edegreef/NBW-resequencing/tree/main/pop_analyses)
 * Made site map including ocean depth using a variety of *R* packages
