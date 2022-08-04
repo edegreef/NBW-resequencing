@@ -1,5 +1,4 @@
 # Notes for prepping runs on MAKER on reference genome
-# (running this on graham cluster on Compute Canada)
 
 # modules (will need to email CC to get initial access to maker)
 module load nixpkgs/16.09 gcc/7.3.0 openmpi/3.1.2 maker/2.31.10
