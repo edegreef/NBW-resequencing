@@ -1,5 +1,5 @@
-# Lost my notes for breakdancer, but recreating here
-#(http://breakdancer.sourceforge.net/pipeline.html)
+
+# Using info from breakdancer pipelien: http://breakdancer.sourceforge.net/pipeline.html
 
 # First thing, I combined 10 samples to make one large bam file using 'samtools merge'. Breakdancer can take merged bam files as long as header and records have RG info. 
 
