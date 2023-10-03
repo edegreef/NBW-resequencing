@@ -1,4 +1,5 @@
 # Prepping gene list and then using enrichR for go-term analysis
+# Help from Matt Thorstensen for initial set up
 
 #library(devtools)
 #install_github("wjawaid/enrichR")
