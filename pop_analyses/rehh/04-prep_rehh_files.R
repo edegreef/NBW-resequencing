@@ -1,6 +1,8 @@
 #!/usr/bin/Rscript
 
-# Preparing data to run in rehh later on. Using code taken from Rehh vignette: https://cran.r-project.org/web/packages/rehh/vignettes/rehh.html
+# Run data2haplohh in rehh to create the wgscan file
+# Rehh vignette: https://cran.r-project.org/web/packages/rehh/vignettes/rehh.html
+# Help from Matt Thorstensen to set this up
 
 library(rehh)
 library(vcfR)
